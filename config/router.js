@@ -11,6 +11,10 @@ router.get('/login', function (req, res) {
   res.render('login', {connect_type: config.connect_type, hostname: config.websoket_server_host})
 });
 
+router.get('/sign_out', function (req, res) {
+  res.status(301).redirect("/login")
+});
+
 router.get('/playlist', function (req, res) {
   res.render('playlist', {connect_type: config.connect_type, hostname: config.websoket_server_host})
 });
