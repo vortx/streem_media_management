@@ -10,9 +10,9 @@ var app = express();
 
 // Certificate SSL
 if (config.connect_type === "https") {
-  var privateKey = fs.readFileSync(config.privateKey, 'utf8');
-  var certificate = fs.readFileSync(config.certificate, 'utf8');
-  var ca = fs.readFileSync(config.ca, 'utf8');
+  var privateKey = fs.readFileSync(config.ssl_privateKey, 'utf8');
+  var certificate = fs.readFileSync(config.ssl_certificate, 'utf8');
+  var ca = fs.readFileSync(config.ssl_ca, 'utf8');
 
   var credentials = {
     key: privateKey,
@@ -30,7 +30,7 @@ var allowCrossDomain = function (req, res, next) {
   next();
 }
 
-
+app.use(express.static('public'));
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
 app.use(bodyParser.urlencoded({extended: true}));

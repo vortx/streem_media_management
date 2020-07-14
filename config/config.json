@@ -1,4 +1,7 @@
 {
   "connect_type": "http",
-  "websoket_server_host": "localhost"
+  "websoket_server_host": "localhost",
+  "ssl_privateKey": "",
+  "ssl_certificate": "",
+  "ssl_ca": ""
 }

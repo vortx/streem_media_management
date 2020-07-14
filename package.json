@@ -1,12 +1,12 @@
 {
   "name": "streem_media_management",
   "version": "1.0.0",
-  "description": "Media switch controller for streem channel",
+  "description": "Media switch controller for streem channel nginx-rtmp",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
+  "keywords": ["switch","controller","nginx-rtmp"],
   "author": "VorTX",
   "license": "ISC",
   "dependencies": {
