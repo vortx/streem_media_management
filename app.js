@@ -3,6 +3,8 @@ const https = require('https');
 var fs = require("fs");
 var config = require('./config/config.json');
 var bodyParser = require('body-parser');
+var parseString = require('xml2js').parseString;
+const WebSocket = require('ws');
 var app = express();
 
 //sudo iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-ports 3000
@@ -41,6 +43,33 @@ app.set("view engine", "ejs");
 var pathRouter = require('./config/router');
 app.use('/', pathRouter);
 
+
+const wss = new WebSocket.Server({ port: 8080 });
+
+wss.on('connection', function connection(ws) {
+  ws.on('message', function incoming(data) {
+    wss.clients.forEach(function each(client) {
+      if (client.readyState === WebSocket.OPEN) {
+        client.send(data);
+      }
+    });
+   // console.log('received: %s', data);
+  });
+});
+
+let  i =0
+setInterval(function () {
+  setTimeout(function () {
+    const ws = new WebSocket('ws://localhost:8080');
+    ws.on('open', function open() {
+      ws.send(i);
+      ws.close()
+    });
+i++
+  }, 100);
+}, 2000)
+
+
 if (config.connect_type === "https") {
   httpsServer.listen(443, () => {
     console.log('httpS  port 443');
@@ -50,3 +79,4 @@ if (config.connect_type === "https") {
     console.log('Server start: http://0.0.0.0:3000');
   });
 }
+

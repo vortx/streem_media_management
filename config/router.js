@@ -11,6 +11,15 @@ router.get('/login', function (req, res) {
   res.render('login', {connect_type: config.connect_type, hostname: config.websoket_server_host})
 });
 
+router.get('/playlist', function (req, res) {
+  res.render('playlist', {connect_type: config.connect_type, hostname: config.websoket_server_host})
+});
+
+router.get('/overlay_cam', function (req, res) {
+  res.render('overlay_cam', {connect_type: config.connect_type, hostname: config.websoket_server_host})
+});
+
+
 router.post('/post', function (req, res) {
   res.send('ok');
   //res.end();

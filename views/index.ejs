@@ -16,6 +16,21 @@
     <meta name="theme-color" content="#563d7c">
 </head>
 <body>
+<script>
+
+
+  // создать подключение
+  //var socket = new WebSocket("wss://emoji.tooladigital.ru:8080");
+  var socket = new WebSocket('ws://localhost:8080');
+
+  //let i = 0
+  // обработчик входящих сообщений
+  socket.onmessage = function (event) {
+    var div = document.getElementById('messages');
+    div.innerHTML = event.data;
+  };
+</script>
+
 <main role="main" class="flex-shrink-0">
     <div class="container">
         <header class="blog-header py-3">
@@ -31,11 +46,12 @@
                 </div>
             </div>
         </header>
+
         <div class="nav-scroller py-1 mb-2">
             <nav class="nav d-flex">
-                <a class="p-2 text-muted" href="#">Streem monitor</a>
-                <a class="p-2 text-muted" href="#">Playlist</a>
-                <a class="p-2 text-muted" href="#">Overlay fo camera</a>
+                <a class="p-2 text-muted active" href="/">Streem monitor</a>
+                <a class="p-2 text-muted" href="/playlist">Playlist</a>
+                <a class="p-2 text-muted" href="/overlay_cam">Overlay fo camera</a>
             </nav>
         </div>
 
@@ -53,11 +69,11 @@
             </div>
             <div class="col-md-4">
                 <div class="row">
-                    <div class="col-md-12">
+                    <!--<div class="col-md-12">
                         <div class="jumbotron ">
 
                         </div>
-                    </div>
+                    </div>-->
                     <div class="col-md-6">
                         <div class="jumbotron text-center">
                             <div class="well">
@@ -127,6 +143,7 @@
 
     </div>
 </main>
+<div id="messages"></div>
 <%- include("template/footer.ejs") %>
 </body>
 </html>
