@@ -47,6 +47,6 @@ if (config.connect_type === "https") {
   });
 } else {
   app.listen(3000, function () {
-    console.log('http port 3000!');
+    console.log('Server start: http://0.0.0.0:3000');
   });
 }

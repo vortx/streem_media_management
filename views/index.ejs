@@ -1,57 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
     <title>Client - Socket test</title>
-    <link rel="stylesheet" media="screen" href="./css/style.css">
-    <script type="text/javascript" async="" src=""></script>
+    <link rel="stylesheet" media="screen" href="./css/bootstrap_4_5/bootstrap.css">
+    <link rel="stylesheet" media="screen" href="./css/bootstrap_4_5/bootstrap-grid.css">
+    <link rel="stylesheet" media="screen" href="./css/bootstrap_4_5/bootstrap-reboot.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script type="text/javascript" async="" src="./js/bootstrap_4_5/bootstrap.js"></script>
 </head>
 <body>
 
-<script>
-
-    var connectType
-  var ct = '<%= connect_type %>'
-  if (ct === "https") {
-     connectType = 'wss'
-  } else {
-     connectType = 'ws'
-  }
-
-  // создать подключение
-  //var socket = new WebSocket("wss://emoji.tooladigital.ru:8080");
-  var socket = new WebSocket(connectType + '://<%= hostname %>:8080');
-
-  //let i = 0
-  // обработчик входящих сообщений
-  socket.onmessage = function (event) {
-    var incomingMessage = event.data;
-    //i++
-    //document.getElementById("messages").textContent = incomingMessage + '<incomming message for me:>' + i;
-
-    var messageElem = document.createElement('div');
-    messageElem.appendChild(document.createTextNode(incomingMessage));
-    document.getElementById('messages').appendChild(messageElem);
-
-  };
-
-  function getInputValue() {
-    var inputVal = document.getElementById("myInput").value;
-    socket.send(inputVal);
-    document.getElementById("myInput").value = '';
-  }
-
-</script>
-
-<h1>websocket test - chat</h1>
-
-<!-- форма сообщений -->
-<input type="text" placeholder="Пши в меня чёнить" id="myInput">
-<button type="button" onclick="getInputValue();">отправить</button>
-
-<!-- div с сообщениями -->
-<div id="messages"></div>
-
-
+<div class="container">
+    <form action="/post" method="post">
+        <p><input type="text" name="str"></p>
+        <p><input type="submit" value="Отправить"></p>
+    </form>
+</div>
+<%- include("template/footer.ejs") %>
 </body>
 </html>
