@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Client - Socket test</title>
+</head>
+<body>
+
+<script>
+
+    var connectType
+  var ct = '<%= connect_type %>'
+  if (ct === "https") {
+     connectType = 'wss'
+  } else {
+     connectType = 'ws'
+  }
+
+  // создать подключение
+  //var socket = new WebSocket("wss://emoji.tooladigital.ru:8080");
+  var socket = new WebSocket(connectType + '://<%= hostname %>:8080');
+
+  //let i = 0
+  // обработчик входящих сообщений
+  socket.onmessage = function (event) {
+    var incomingMessage = event.data;
+    //i++
+    //document.getElementById("messages").textContent = incomingMessage + '<incomming message for me:>' + i;
+
+    var messageElem = document.createElement('div');
+    messageElem.appendChild(document.createTextNode(incomingMessage));
+    document.getElementById('messages').appendChild(messageElem);
+
+  };
+
+  function getInputValue() {
+    var inputVal = document.getElementById("myInput").value;
+    socket.send(inputVal);
+    document.getElementById("myInput").value = '';
+  }
+
+</script>
+
+<h1>websocket test - chat</h1>
+
+<!-- форма сообщений -->
+<input type="text" placeholder="Пши в меня чёнить" id="myInput">
+<button type="button" onclick="getInputValue();">отправить</button>
+
+<!-- div с сообщениями -->
+<div id="messages"></div>
+
+
+</body>
+</html>
