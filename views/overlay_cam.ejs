@@ -31,15 +31,28 @@
                 </div>
             </div>
         </header>
-        <div class="nav-scroller py-1 mb-2">
-            <nav class="nav d-flex">
-                <a class="p-2 text-muted" href="/">Streem monitor</a>
-                <a class="p-2 text-muted" href="/playlist">Playlist</a>
-                <a class="p-2 text-muted active" href="/overlay_cam">Overlay fo camera</a>
-            </nav>
-        </div>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-2">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
-
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/">Streem monitor</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/playlist">Playlist</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/overlay_cam">Overlay fo camera</a>
+                    </li>
+                    <!--<li class="nav-item">
+                        <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+                    </li>-->
+                </ul>
+            </div>
+        </nav>
     </div>
 </main>
 <%- include("template/footer.ejs") %>
