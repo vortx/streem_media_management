@@ -7,6 +7,10 @@ router.get('/', function (req, res) {
   res.render('index', {connect_type: config.connect_type, hostname: config.websoket_server_host})
 });
 
+router.get('/login', function (req, res) {
+  res.render('login', {connect_type: config.connect_type, hostname: config.websoket_server_host})
+});
+
 router.post('/post', function (req, res) {
   res.send('ok');
   //res.end();
