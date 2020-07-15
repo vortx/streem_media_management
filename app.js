@@ -1,10 +1,11 @@
+var config = require('./config/config.json');
 var express = require('express');
 const https = require('https');
 var fs = require("fs");
-var config = require('./config/config.json');
 var bodyParser = require('body-parser');
 var parseString = require('xml2js').parseString;
 const WebSocket = require('ws');
+const systemInfo = require('./modules/system_info')
 var app = express();
 
 //sudo iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-ports 3000
@@ -43,8 +44,20 @@ app.set("view engine", "ejs");
 var pathRouter = require('./config/router');
 app.use('/', pathRouter);
 
+var wss
+if (config.connect_type === "https") {
+  var wss = new WebSocket.Server({httpsServer});
+  httpsServer.listen(443, () => {
+    console.log('httpS  port 443');
+  });
+} else {
+  wss = new WebSocket.Server({port: config.websoket_server_port});
+  console.log('WEBSocket port', config.websoket_server_port)
 
-const wss = new WebSocket.Server({ port: 8080 });
+  app.listen(config.webserver_port, function () {
+    console.log('Server start: http://0.0.0.0:' + config.webserver_port);
+  });
+}
 
 wss.on('connection', function connection(ws) {
   ws.on('message', function incoming(data) {
@@ -53,30 +66,26 @@ wss.on('connection', function connection(ws) {
         client.send(data);
       }
     });
-   // console.log('received: %s', data);
+    // console.log('received: %s', data);
   });
 });
 
-let  i =0
+
+//let i = 0
 setInterval(function () {
   setTimeout(function () {
-    const ws = new WebSocket('ws://localhost:8080');
-    ws.on('open', function open() {
-      ws.send(i);
-      ws.close()
-    });
-i++
+    const ws = new WebSocket('ws://localhost:' + config.websoket_server_port);
+     systemInfo(ws);
+    /*
+     const ws = new WebSocket('ws://localhost:' + config.websoket_server_port);
+     ws.on('open', function open() {
+       ws.send(i);
+       ws.close()
+     });
+     i++
+     */
   }, 100);
 }, 2000)
 
 
-if (config.connect_type === "https") {
-  httpsServer.listen(443, () => {
-    console.log('httpS  port 443');
-  });
-} else {
-  app.listen(3000, function () {
-    console.log('Server start: http://0.0.0.0:3000');
-  });
-}
 

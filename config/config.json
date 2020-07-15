@@ -1,6 +1,8 @@
 {
   "connect_type": "http",
+  "webserver_port": "3000",
   "websoket_server_host": "localhost",
+  "websoket_server_port": "8080",
   "ssl_privateKey": "",
   "ssl_certificate": "",
   "ssl_ca": ""

@@ -3,6 +3,7 @@ var express = require('express');
 var path = require('path');
 var router = express.Router();
 
+
 router.get('/', function (req, res) {
   res.render('index', {connect_type: config.connect_type, hostname: config.websoket_server_host})
 });
@@ -23,10 +24,13 @@ router.get('/overlay_cam', function (req, res) {
   res.render('overlay_cam', {connect_type: config.connect_type, hostname: config.websoket_server_host})
 });
 
-
 router.post('/post', function (req, res) {
   res.send('ok');
-  //res.end();
+});
+
+// any get request for no route - redirect to home page
+router.get('*', function (req, res) {
+  res.redirect('/');
 });
 
 module.exports = router;
