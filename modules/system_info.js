@@ -1,15 +1,12 @@
 "use strict"
 var config = require('../config/config.json');
-const WebSocket = require('ws');
 var os = require("os");
-
+var fs = require("fs");
 function serializInfo() {
   let paramsData = {}
 
   //memory info
   let totalMemory = (os.totalmem() / 1024 / 1000 / 1024).toFixed(2)
-  let freeMemory = (process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2)
-  let usageMemory = (totalMemory - freeMemory).toFixed(2)
 
   //server uptime info
   let uptimeServer = os.uptime()
@@ -25,20 +22,18 @@ function serializInfo() {
 
   // add to hash
   paramsData.totalMemory = totalMemory
-  paramsData.freeMemory = freeMemory
-  paramsData.usageMemory = usageMemory
   paramsData.uptimeServer = uptimeServer
-  // paramsData.uptimeServer = uptimeServer
 
   return paramsData
 }
 
-var resultSystemInfo = function(ws) {
+var resultSystemInfo = function (ws) {
   ws.on('open', function open() {
     ws.send(JSON.stringify(serializInfo()));
     ws.close()
   });
 }
+
 
 
 module.exports = resultSystemInfo;

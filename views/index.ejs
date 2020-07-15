@@ -13,22 +13,28 @@
             integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
             crossorigin="anonymous"></script>
     <script type="text/javascript" async="" src="./js/bootstrap_4_5/bootstrap.js"></script>
+    <script src="./js/players/hls.js"></script>
     <meta name="theme-color" content="#563d7c">
 </head>
 <body>
 <script>
 
-
   // создать подключение
   //var socket = new WebSocket("wss://emoji.tooladigital.ru:8080");
   var socket = new WebSocket('ws://localhost:8080');
-
   //let i = 0
   // обработчик входящих сообщений
   socket.onmessage = function (event) {
-    var div = document.getElementById('messages');
     let dataSystemInfo = JSON.parse(event.data)
-    div.innerHTML = [dataSystemInfo.totalMemory,dataSystemInfo.freeMemory ,dataSystemInfo.usageMemory,dataSystemInfo.uptimeServer];
+
+    var totalMemory = document.getElementById('totalMemory');
+    totalMemory.innerHTML = dataSystemInfo.totalMemory;
+
+    var uptimeServer = document.getElementById('uptimeServer');
+    uptimeServer.innerHTML = dataSystemInfo.uptimeServer;
+
+    var div = document.getElementById('messages');
+    div.innerHTML = [dataSystemInfo.totalMemory,dataSystemInfo.uptimeServer];
   };
 </script>
 
@@ -75,13 +81,26 @@
         <div class="row">
             <div class="col-md-8">
                 <div class="jumbotron">
-                    <h1 class="display-4">Hello, world!</h1>
-                    <p class="lead">This is a simple hero unit, a simple jumbotron-style component for calling extra
-                        attention to featured content or information.</p>
-                    <hr class="my-4">
-                    <p>It uses utility classes for typography and spacing to space content out within the larger
-                        container.</p>
-                    <a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a>
+                    <video id="video" muted controls width="640px" height="380px"></video>
+                    <script>
+
+                      var config = {};
+                      var video = document.getElementById('video');
+                      if (Hls.isSupported()) {
+                        var hls = new Hls(config);
+                        hls.loadSource('http://' + location.hostname + '9992' + '/hls/tv.m3u8');
+                        hls.attachMedia(video);
+                        hls.on(Hls.Events.MANIFEST_PARSED, function () {
+                          video.play();
+                        });
+                      }
+                      else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                        video.src = 'http://' + location.hostname + '9992' + '/hls/tv.m3u8';
+                        video.addEventListener('loadedmetadata', function () {
+                          video.play();
+                        });
+                      }
+                    </script>
                 </div>
             </div>
             <div class="col-md-4">
@@ -94,8 +113,8 @@
                     <div class="col-md-6">
                         <div class="jumbotron text-center">
                             <div class="well">
-                                <h1 style="font-size: 18px" id="cpu_used">42 %</h1>
-                                <p style="font-size: 12px">cpu <span id="cpu_used_status"><i
+                                <h1 style="font-size: 18px" id="totalMemory"></h1>
+                                <p style="font-size: 12px">Total memory <span id="cpu_used_status"><i
                                                 class="glyphicon glyphicon-sort" style="color: #ffa00f;"></i></span></p>
                             </div>
                         </div>
@@ -103,12 +122,37 @@
                     <div class="col-md-6">
                         <div class="jumbotron text-center">
                             <div class="well">
-                                <h1 style="font-size: 18px" id="cpu_used">42 %</h1>
-                                <p style="font-size: 12px">mem <span id="cpu_used_status"><i
+                                <h1 style="font-size: 18px" id="uptimeServer"></h1>
+                                <p style="font-size: 12px">Uptime server<span id="uptimeServer"><i
                                                 class="glyphicon glyphicon-sort" style="color: #ffa00f;"></i></span></p>
                             </div>
                         </div>
                     </div>
+
+                    <script>
+
+                      function stop_pl() {
+                        // отправляем данные в бэк
+                        let xhr = new XMLHttpRequest();
+                        xhr.open("POST", '/stop_pl', true);
+                        xhr.send('true');
+                      }
+
+                      function play_pl() {
+                        // отправляем данные в бэк
+                        let xhr = new XMLHttpRequest();
+                        xhr.open("POST", '/play_pl', true);
+                        xhr.send('true');
+                      }
+
+                      function cam_play() {
+                        // отправляем данные в бэк
+                        let xhr = new XMLHttpRequest();
+                        xhr.open("POST", '/cam_play', true);
+                        xhr.send('true');
+                      }
+                    </script>
+
                     <div class="col-md-12">
                         <div class="text-center">
                             <h1 style="font-size: 18px" id="total_viewers1">
@@ -117,6 +161,8 @@
                                            onclick="stop_pl()">
                                     <input class="btn btn-outline-secondary" type="button" value="Run playlist"
                                            onclick="play_pl()">
+                                    <input class="btn btn-outline-secondary" type="button" value="Run camera streem"
+                                           onclick="cam_play()">
                                 </div>
                             </h1>
                         </div>

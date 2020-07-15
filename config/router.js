@@ -24,9 +24,19 @@ router.get('/overlay_cam', function (req, res) {
   res.render('overlay_cam', {connect_type: config.connect_type, hostname: config.websoket_server_host})
 });
 
-router.post('/post', function (req, res) {
+router.post('/stop_pl', function (req, res) {
+  res.send('ok');
+  console.log('stop_pl')
+});
+
+router.post('/play_pl', function (req, res) {
   res.send('ok');
 });
+
+router.post('/cam_play', function (req, res) {
+  res.send('ok');
+});
+
 
 // any get request for no route - redirect to home page
 router.get('*', function (req, res) {
