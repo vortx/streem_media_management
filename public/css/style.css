@@ -11,3 +11,10 @@ body{
     background-color: #1c1e22;
     padding: 1rem 1rem;
 }
+
+
+#video {
+    /* override other styles to make responsive */
+    width: 100%    !important;
+    height: auto   !important;
+}
