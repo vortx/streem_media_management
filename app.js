@@ -101,11 +101,11 @@ setInterval(function () {
          console.log('error', {"error": false});
       }*/
 
-      /*if (err != null) {
+      if (err != null) {
          console.log('statistics', result);
       } else {
-         console.log('statistics', result.rtmp.server[0].application[0].live);
-      }*/
+         console.log('statistics', result.rtmp.server[0].application[3].live[0].stream);
+      }
 
     });
 
