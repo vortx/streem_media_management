@@ -1,14 +1,13 @@
-FROM buildpack-deps:stretch
+FROM vortxman/ubuntu:deploy
 
 LABEL maintainer="VorTX <info@taskdoit.com>"
 
 # Versions of Nginx and nginx-rtmp-module to use
-ENV NGINX_VERSION nginx-1.16.0
-ENV NGINX_RTMP_MODULE_VERSION 1.2.1
+ENV NGINX_VERSION nginx-1.17.6
 
 # Install dependencies
 RUN apt-get update && \
-    apt-get install -y ca-certificates openssl libssl-dev && \
+    apt-get install -y ca-certificates openssl git build-essential ffmpeg libpcre3 libpcre3-dev libssl-dev zlib1g-dev wget curl htop mc && \
     rm -rf /var/lib/apt/lists/*
 
 # Download and decompress Nginx
@@ -20,10 +19,9 @@ RUN mkdir -p /tmp/build/nginx && \
 # Download and decompress RTMP module
 RUN mkdir -p /tmp/build/nginx-rtmp-module && \
     cd /tmp/build/nginx-rtmp-module && \
-    wget -O nginx-rtmp-module-${NGINX_RTMP_MODULE_VERSION}.tar.gz https://github.com/arut/nginx-rtmp-module/archive/v${NGINX_RTMP_MODULE_VERSION}.tar.gz && \
-    tar -zxf nginx-rtmp-module-${NGINX_RTMP_MODULE_VERSION}.tar.gz && \
-    cd nginx-rtmp-module-${NGINX_RTMP_MODULE_VERSION}
+    git clone https://github.com/vortx/nginx-rtmp-module.git .
 
+RUN useradd --no-create-home nginx
 # Build and install Nginx
 # The default puts everything under /usr/local/nginx, so it's needed to change
 # it explicitly. Not just for order but to have it in the PATH
@@ -39,8 +37,8 @@ RUN cd /tmp/build/nginx/${NGINX_VERSION} && \
         --with-http_ssl_module \
         --with-threads \
         --with-ipv6 \
-        --add-module=/tmp/build/nginx-rtmp-module/nginx-rtmp-module-${NGINX_RTMP_MODULE_VERSION} && \
-    make -j $(getconf _NPROCESSORS_ONLN) && \
+        --add-module=/tmp/build/nginx-rtmp-module && \
+    make -j 1 && \
     make install && \
     mkdir /var/lock/nginx && \
     rm -rf /tmp/build
@@ -49,12 +47,16 @@ RUN cd /tmp/build/nginx/${NGINX_VERSION} && \
 RUN ln -sf /dev/stdout /var/log/nginx/access.log && \
     ln -sf /dev/stderr /var/log/nginx/error.log
 
-# Create config folder
-RUN mkdir /opt/nginx && \
-    cd /it && mkdir /hls && mkdir /playlist && mkdir /vod
 
 # Set up config file
-COPY nginx.conf /etc/nginx/nginx.conf
+#COPY nginx.conf /etc/nginx/nginx.conf
+
+# Create config folder
+RUN mkdir /it && mkdir /opt/nginx && \
+    cd /it && mkdir /hls && mkdir /playlist && mkdir /vod
+
 
 EXPOSE 1935
-CMD ["nginx", "-g", "daemon off;"]
+EXPOSE 81
+
+CMD ["nginx", "-g", "daemon on;","/bin/bash"]

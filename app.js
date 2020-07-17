@@ -1,5 +1,6 @@
 var config = require('./config/config.json');
 var express = require('express');
+var request = require('request');
 const https = require('https');
 var fs = require("fs");
 var bodyParser = require('body-parser');
@@ -85,6 +86,32 @@ setInterval(function () {
      i++
      */
   }, 100);
+
+  request.get('http://localhost:81/stat', 1000, function (error, meta, xml) {
+
+    if (error) {
+      io.emit('error', {"error": true});
+    }
+
+    parseString(xml, function (err, result) {
+/*
+      if (err != null) {
+        console.log('error', {"error": true});
+      } else {
+         console.log('error', {"error": false});
+      }*/
+
+      /*if (err != null) {
+         console.log('statistics', result);
+      } else {
+         console.log('statistics', result.rtmp.server[0].application[0].live);
+      }*/
+
+    });
+
+  });
+
+
 }, 2000)
 
 

@@ -40,6 +40,7 @@ router.post('/cam_play', function (req, res) {
 
 // any get request for no route - redirect to home page
 router.get('*', function (req, res) {
+  console.log(req)
   res.redirect('/');
 });
 
